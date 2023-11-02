@@ -1,0 +1,77 @@
+verificando a versão do python:
+<python --version>
+
+verificando a versao da virtualenv:
+<virtualenv --version>
+
+criando uma virtualenv e dando o nome de 'venv'
+<virtualenv venv>
+
+ativando a o ambiente virtual:
+<venv/Scripts/Activate>
+
+desatinado o ambiente virtual:
+<deactivate>
+
+instalando o Django versão 4.1:
+<pip install django=4.1>
+
+uma for de ver todas as dependêcias do programa:
+<pip freeze>
+
+Uma boa prática é criar um arquivo, chamado "requirements.txt", contendo todos os arquivos necessários:
+obs: sempre que fizermos um pip novo executar esse comando
+<pip freeze > requirements.txt>
+
+poderemos visualizar todos os comando que podemos executar com o Django:
+<django-admin help>
+
+Obs: Se não adicionássemos o . em 'django-admin startproject setup .', seria criada outra pasta "setup", dentro de 
+"setup", com as configurações.atravez do comando startproject iniciamos nosso projeto:
+<django-admin startproject setup .>
+
+Agora vamos acessar o arquivo "manage.py", queremos visualizar nosso projeto. Para isso, executaremos o comando no terminal.
+<python manage.py runserver>
+
+----------------------------------------------------------------------
+*IDIOMA E TIME ZONE
+mudaremos o timezono na pasta setup no settings.py na linha 106 mudaremos para <LANGUAGE_CODE = 'pt-br' > e na
+linha 108 <TIME_ZONE = 'America/Sao_Paulo'>
+-----------------------------------------------------------------------
+*VARIAVEIS DE AMBIENTE
+criaremos uma variavel de ambiente com seginte comando
+<pip install python-dotenv>
+
+na dependêcia da pasta do projeto criaremos um arquivo chamado '.env' para manter as variávei de ambiente
+nesse arquivo vamos copiar do arquivo settings.py linha 23 toda essa parte:
+<SECRET_KEY = #############################>
+obs: lembre de retirar as aspas
+
+no arquivo settings.py remova a chave deixando apenas assim:
+<SECRET_KEY = ''>
+
+no arquivo settings.py faça os importes:
+em pathlib acrescente o <os>
+e faça o importe:
+<from dotenv import load_dotenv>
+
+coleque a função que carrega as variáveis de ambiente
+<load_dotenv()>
+
+em settings.py em SECRET_KEY faça o seginte:
+<SECRET_KEY = str(os.getenv('SECRET_KEY'))>
+
+*para saber: toda essa modificação tem por finalidade ocultar arquivos sensiveis ao enviar o projeto para o GITHUB
+
+-------------------------------------------------------------------------
+
+*GIT E GITHUB
+na pagina do GITHUB criar <new repository>
+em 'Ropository name' vamos dar no ao nosso repositório
+chamaremos esse de <alura_space>
+
+criaremos um arquivo na dependencia da pasta ALURA_SPACE <.gitignore> para informar quais 
+os arquivos não devem ser enviados par ao GITHUB
+podemos obter de forma prática no site .gitignore.io 'https://www.toptal.com/developers/gitignore' uma lista 
+com todos os arquivos que não devemos enviar para o GITHUB ..basta informar o framework Django e logo
+copiar essa lista e colar no arquivo '.gitignore'
