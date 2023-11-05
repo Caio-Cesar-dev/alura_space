@@ -1,0 +1,248 @@
+verificando a versão do python:
+<python --version>
+
+verificando a versao da virtualenv:
+<virtualenv --version>
+
+criando uma virtualenv e dando o nome de 'venv'
+<virtualenv venv>
+
+ativando a o ambiente virtual:
+<venv/Scripts/Activate>
+
+desatinado o ambiente virtual:
+<deactivate>
+
+instalando o Django versão 4.1:
+<pip install django=4.1>
+
+uma for de ver todas as dependêcias do programa:
+<pip freeze>
+
+Uma boa prática é criar um arquivo, chamado "requirements.txt", contendo todos os arquivos necessários:
+obs: sempre que fizermos um pip novo executar esse comando
+<pip freeze > requirements.txt>
+
+poderemos visualizar todos os comando que podemos executar com o Django:
+<django-admin help>
+
+Obs: Se não adicionássemos o . em 'django-admin startproject setup .', seria criada outra pasta "setup", dentro de 
+"setup", com as configurações.atravez do comando startproject iniciamos nosso projeto:
+<django-admin startproject setup .>
+
+Agora vamos acessar o arquivo "manage.py", queremos visualizar nosso projeto. Para isso, executaremos o comando no terminal.
+<python manage.py runserver>
+
+----------------------------------------------------------------------
+*IDIOMA E TIME ZONE
+mudaremos o timezono na pasta setup no settings.py na linha 106 mudaremos para <LANGUAGE_CODE = 'pt-br' > e na
+linha 108 <TIME_ZONE = 'America/Sao_Paulo'>
+-----------------------------------------------------------------------
+*VARIAVEIS DE AMBIENTE
+criaremos uma variavel de ambiente com seginte comando
+<pip install python-dotenv>
+
+na dependêcia da pasta do projeto criaremos um arquivo chamado '.env' para manter as variávei de ambiente
+nesse arquivo vamos copiar do arquivo settings.py linha 23 toda essa parte:
+<SECRET_KEY = #############################>
+obs: lembre de retirar as aspas
+
+no arquivo settings.py remova a chave deixando apenas assim:
+<SECRET_KEY = ''>
+
+no arquivo settings.py faça os importes:
+em pathlib acrescente o <os>
+e faça o importe:
+<from dotenv import load_dotenv>
+
+coleque a função que carrega as variáveis de ambiente
+<load_dotenv()>
+
+em settings.py em SECRET_KEY faça o seginte:
+<SECRET_KEY = str(os.getenv('SECRET_KEY'))>
+
+*para saber: toda essa modificação tem por finalidade ocultar arquivos sensiveis ao enviar o projeto para o GITHUB
+
+-------------------------------------------------------------------------
+
+*GIT E GITHUB
+na pagina do GITHUB criar <new repository>
+em 'Ropository name' vamos dar no ao nosso repositório
+chamaremos esse de <alura_space>
+
+criaremos um arquivo na dependencia da pasta ALURA_SPACE <.gitignore> para informar quais 
+os arquivos não devem ser enviados par ao GITHUB
+podemos obter de forma prática no site .gitignore.io 'https://www.toptal.com/developers/gitignore' uma lista 
+com todos os arquivos que não devemos enviar para o GITHUB ..basta informar o framework Django e logo
+copiar essa lista e colar no arquivo '.gitignore'.
+
+na sequencia no terminal vamos iniciar um repositóriolocal o git:
+<git init>
+para adicionar as pastas e arquivos que serão enviados:
+<git add .>
+faremos um comite:
+<git commit -m "projeto alura_space">  obs: esse '-m' é para colocarmos uma mensagem curta e descritiva.
+
+já no site do GITHUB vamos copiar em: '…or create a new repository on the command line' esse o seguinte comando:
+<git remote add origin https://github.com/Caio-Cesar-dev/alura_space.git>
+com isso nosso repositório local apontara para esse endereço 
+
+na sequencia faremos:
+<git push origin master>
+agora ele enviará nosso repositório para o GITHUB
+
+-------------------------------------------------------
+APP E PROJETO
+com o comando:
+<python manage.py startapp galeria>
+criamos a pasta dos apps e demos o nome de galeria
+
+no pasta setup em settings.py linha36 'INSTALED_APPS =' vamos acrescentar nossa galeria
+<'galeria',>  
+
+--------------------------------------------------------
+VIEWS E URLS
+testando o arquivo responsavel por renderizar nossas paginas web que é views.py
+vamos importar o :
+<from django.http import HttpResponse>
+ criaremos uma funcão responsavel por nossa pagina principal
+ ...... esse import e index será modificado mais abaixo!!!!!
+
+ teremos que definir nossas rotas e para isso vamos configurar na pasta setup no arquivo
+ urls.py adcionando o include no importe:
+ <from django.urls import path, include> 
+ em 'urlpatterns=' vamos adcionar a rota:
+ <path('', include('galeria.urls') ),>
+-------------------------------------------------------------------
+
+ISOLANDO AS URLS
+vamos criar um arquivo na pasta galeria de modo a isolar nossas urls:
+<urls.py>
+vamos importar do django.urls:
+<from django.urls import path>
+
+e de galeria.views:
+<from galeria.views import index>
+
+e dentro do arquivo:
+<urlpatterns = [
+    path= ('', index)
+]>
+-----------------------------------------------------------------------
+TEMPLATES
+no escopo do ALURA-SPACE vamos criar a pasta chamada 'templates'
+dentro criaremos um arquivo chamado 'index.html'
+
+configurando o arquivo settings.py da pasta setup:
+vamos na linha 58  'TEMPLATES=' no 'DIRS' iremos colocar:
+<os.path.join(BASE_DIR, 'templates')>
+
+logo em 'views.py' da pasta galeria vamos configurá-la para redenrizar nosso aquivo html
+apagaremos o import 'from django.http import HttpResponse'
+e modificaremos a função index:
+<def index(request):
+    return render(request, 'index.html')>
+
+--------------------------------------------------------------------------------------
+CARREGANDO TEMPLATES
+vamos criar uma pasta chamada 'galeria' dentro da pasta templates e arrastar o
+arquivo index.html para dentro..
+logo teremos que mudar o endereço tb no arquivo views.py:
+<def index(request):
+    return render(request, 'galeria/index.html')>
+
+--------------------------------------------------------------------------------------
+ARQUIVOS ESTÁTICOS
+dentro de setup vamos criar uma pasta chamada 'static'
+obs: dentros as pastas assets e styles do projeto
+
+em settings.py vamos criar o caminho para esta pasta na linha 124:
+<STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'setup/static')
+]>
+
+Precisamos passar, também, o caminho absoluto para que o diretório consiga pegarr os 
+arquivos estáticos. Para isso, vamos inserir a "raiz" dos caminhos com STATIC_ROOT, 
+com o caminho
+<STATIC_ROOT = os.path.join(BASE_DIR, 'static')>
+
+no terminal vamos executar o seguite comando:
+<python manage.py collectstatic>
+
+no arquivo 'index.html' no inicio da página:
+<{% load_static %}>
+
+na linha 13 onde o aquivo está assim:
+< <link rel="stylesheet" href="/styles/style.css"> >
+ficará assim:
+< <link rel="stylesheet" href="{% static '/styles/style.css' %}"> >
+
+no do 'body' do index.html faremos a alteração em todos os endereços dos icones que se encontram na pasta static,
+acrescentando entre as aspas duplas no início< {% static ' > e no fechamento < ' %} > .Exemplo:  
+< src="{% static '/assets/ícones/1x/search.png' %}" >
+
+--------------------------------------------------------------------------------------
+OUTRAS PÁGINAS
+vamos em templates criar o arquivo 'imagem.html' e nele adcionaremos os códigos já feitos 
+no github
+
+na pasta galeria no aruivo views.py criaremos uma nova função para rerizar essa nova página
+<def imagem(request):
+    return render(request, 'galeria/imagem.html')> 
+
+agora vamos no arquivo urls.py que tb está na pasta galeria iremos adicionar um novo path
+em 'urlpatterns = ' 
+<path('imagem/',imagem)> 
+e acrescentar o import de 'imagem' junto ao de 'index'
+
+no arquivo 'imagem.html' no inicio da página:
+<{% load static %}>
+
+na linha 13 onde o aquivo está assim:
+< <link rel="stylesheet" href="/styles/style.css"> >
+ficará assim:
+< <link rel="stylesheet" href="{% static '/styles/style.css' %}"> >
+
+no do 'body' do imagem.html faremos a alteração em todos os endereços dos icones que se encontram na pasta static,
+acrescentando entre as aspas duplas no início< {% static ' > e no fechamento < ' %} > .Exemplo:  
+< src="{% static '/assets/ícones/1x/search.png' %}" >
+
+-------------------------------------------------------------------------------------
+URL NAME
+para linkar a imagem da pagina index.html devemos:
+em urls.py vamos acrescentar em 'urlpatterns='  o 'name=' ao path:
+ficando assim:
+<path('imagem/', imagem, name='imagem')>
+
+já no arquivo index.html vamos na tag 'section class="galeria" ' onde está '<a href="imagem.html">'
+mudaremos para < <a href="{% url 'imagem' %}"> >
+e faremos essa alteração nos demais do msmo arquivo
+
+voltamos novamente em urls.py vamos acrescentar em 'urlpatterns=' o 'name' ao path:
+ficando assim:
+<path('', index, name='index'),>
+
+no arquivo imagem.html vamos procurar o botão 'Home' e vamos alterar seu endereço que está <a href='index.html' para 
+código python ficando assim:
+< <a href="{% url 'index' %}"...>
+
+-------------------------------------------------------------------------------------------------------------------
+para não gerarmos duplicaçõa em nosso código vamos criar um arquivo chamado base.html e nele vamos colocar o que é
+igual em index.html e imagem.html...
+em base.html dentro da tag body colocaremos o seguinte comando:
+< {% block content %} {% endblock %} >
+
+o inicio das paginas index.html e imagem.html ficaram com os seguintes códigos:
+<{% extends 'galeria/base.html' %}
+{% load static %}
+{% block content %}>
+
+e no final do arquivo terá o fechamento:
+<{% endblock %}>
+--------------------------------------------------------------------------------------
+PARTIALS
+Dentro de "templates/galeria", criaremos a paça "partials". Dentro dela, criaremos o arquivo "_footer.html", 
+que receberá as estruturas.
+no arquivo base.html dentro da tag body vamos acrescentar o caminho para nosso footer da
+página:
+<{% include 'galeria/partials/_footer.html' %}>
