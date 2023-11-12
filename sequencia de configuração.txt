@@ -86,6 +86,7 @@ faremos um comite:
 já no site do GITHUB vamos copiar em: '…or create a new repository on the command line' esse o seguinte comando:
 <git remote add origin https://github.com/Caio-Cesar-dev/alura_space.git>
 com isso nosso repositório local apontara para esse endereço 
+obs: se o repositório já existe ..pule essa parte para atualizar o repositório.
 
 na sequencia faremos:
 <git push origin master>
